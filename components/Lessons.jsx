@@ -2,9 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
-const Lessons = ({user, unit, active, time}) => {
+import GrayText from "./GrayText";
+
+const Lessons = ({user, unit, active, time, navigate}) => {
     return (
-        <GroupItem>
+        <GroupItem onPress={navigate.bind(this, 'Student')}>
             <Avatar/>
             <View style={{flex: 1}}>
                 <FullName>{user.fullname}</FullName>
@@ -29,12 +31,7 @@ const GroupDate = styled.Text`
   border-radius: 18px;
   font-weight: 600;
   font-size: 14px;
-  line-height: 28px;
-`;
-
-const GrayText = styled.Text`
-  font-size: 16px;
-  color: #8b979f;
+  line-height: 30px;
 `;
 
 const FullName = styled.Text`
