@@ -1,103 +1,38 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import { StyleSheet, Text, View, SectionList } from 'react-native';
+import {SectionList} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
+import axios from 'axios';
 
 import {Lessons, SectionTitle} from '../components';
-import StudentScreen from "./StudentScreen";
 
-const DATA = [
-    {
-        title: '14 сентября',
-        data: [
-                  {
-                      time: '15:30',
-                      active: true,
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  }
-               ]
-    },
-    {
-        title: '16 сентября',
-        data: [
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  },
-                  {
-                      time: '15:30',
-                      unit: 'базы данных',
-                      user: {
-                          fullname: "Вася Пупкин"
-                      }
-                  }
-               ]
-    }
-];
+const HomeScreen = ({navigation}) => {
+    const [data, setData] = useState(null);
 
-const HomeScreen = ({navigation}) => (
-    <Container>
-      <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => index}
-        renderItem={({ item }) => <Lessons navigate={navigation.navigate} {...item} />}
-        renderSectionHeader={({ section: { title } }) => (
-          <SectionTitle>{title}</SectionTitle>
-        )}
-      />
-      <PlusButton>
-          <Ionicons name="ios-add" size={36} color="white"/>
-      </PlusButton>
-    </Container>
-);
+    useEffect(() => {
+        axios.get('https://api.myjson.com/bins/sy5t8.json').then(({data}) => {
+            setData(data);
+        });
+    }, []);
+
+    return (
+        <Container>
+            {data && (
+                <SectionList
+                sections={data}
+                keyExtractor={(item, index) => index}
+                renderItem={({item}) => <Lessons navigate={navigation.navigate} item={item}/>}
+                renderSectionHeader={({section: {title}}) => (
+                    <SectionTitle>{title}</SectionTitle>
+                )}
+                />
+            )}
+            <PlusButton>
+                <Ionicons name="ios-add" size={36} color="white"/>
+            </PlusButton>
+        </Container>
+    )
+};
 
 HomeScreen.navigationOptions = {
     title: "Студенты",
@@ -119,7 +54,7 @@ const PlusButton = styled.TouchableOpacity`
   border-radius: 50px;
   background: #2a86ff;
   shadow-color: #2a86ff;
-  shadow-opacity: 0.7;
+  shadow-opacity: 0.4;
   shadow-radius: 3.5;
   elevation: 4;
 `;

@@ -3,11 +3,15 @@ import styled from 'styled-components/native';
 
 import GrayText from "./GrayText";
 
-const Button = ({children}) => (
-    <ButtonWrapper>
+const Button = ({children, color}) => (
+    <ButtonWrapper color={color}>
         <ButtonText>{children}</ButtonText>
     </ButtonWrapper>
 );
+
+Button.defaultProps = {
+    color: '#2a86ff'
+};
 
 const ButtonWrapper = styled.TouchableOpacity`
   height: 45px;
@@ -16,7 +20,7 @@ const ButtonWrapper = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  background: #2a86ff;
+  background: ${props => props.color};
 `;
 
 const ButtonText = styled.Text`

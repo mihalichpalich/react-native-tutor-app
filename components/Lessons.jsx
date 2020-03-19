@@ -2,17 +2,20 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
+import Badge from './Badge';
 import GrayText from "./GrayText";
 
-const Lessons = ({user, unit, active, time, navigate}) => {
+const Lessons = ({navigate, item}) => {
+    const {user, unit, active, time} = item;
+
     return (
-        <GroupItem onPress={navigate.bind(this, 'Student')}>
+        <GroupItem onPress={navigate.bind(this, 'Student', item)}>
             <Avatar/>
             <View style={{flex: 1}}>
                 <FullName>{user.fullname}</FullName>
                 <GrayText>{unit}</GrayText>
             </View>
-            <GroupDate active={active}>{time}</GroupDate>
+            <Badge active={active}>{time}</Badge>
         </GroupItem>
     );
 };
@@ -21,18 +24,6 @@ Lessons.defaultProps = {
     title: 'Untitled',
     items: []
 };
-
-const GroupDate = styled.Text`
-  background: ${props => props.active ? '#2a86ff' : '#e9f5ff'};
-  color: ${props => props.active ? '#fff' : '#4294ff'};
-  width: 70px;
-  height: 32px;
-  text-align: center;
-  border-radius: 18px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 30px;
-`;
 
 const FullName = styled.Text`
   font-weight: 600;

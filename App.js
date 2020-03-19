@@ -14,7 +14,7 @@ const AppNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: 'Student'
+        initialRouteName: 'Home'
     }
 );
 
