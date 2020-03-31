@@ -11,12 +11,21 @@ import {lessonsApi} from "../utils/api";
 
 const HomeScreen = ({navigation}) => {
     const [data, setData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
+    const fetchLessons = () => {
+        setIsLoading(true);
+
         lessonsApi.get().then(({data}) => {
             setData(data.data);
-        });
-    }, []);
+            setIsLoading(false);
+        })
+            .catch(e => {
+                setIsLoading(false);
+            });
+    };
+
+    useEffect(fetchLessons, []);
 
     return (
         <Container>
@@ -24,6 +33,8 @@ const HomeScreen = ({navigation}) => {
                 <SectionList
                 sections={data}
                 keyExtractor={(item, index) => index}
+                onRefresh={fetchLessons()}
+                refreshing={isLoading}
                 renderItem={({item}) => (
                     <Swipeable rightButtons={[<Text>Left</Text>,<Text>Right</Text>]}>
                         <Lessons navigate={navigation.navigate} item={item}/>

@@ -4,15 +4,21 @@ import styled from 'styled-components/native';
 
 import Badge from './Badge';
 import GrayText from "./GrayText";
+import getAvatarColor from "../utils/getAvatarColor";
 
 const Lessons = ({navigate, item}) => {
-    const {user, lesson, active, time} = item;
+    const {student, lesson, active, time} = item;
+    const avatarColors = getAvatarColor(student.fullname[0].toUpperCase());
 
     return (
         <GroupItem onPress={navigate.bind(this, 'Student', item)}>
-            <Avatar/>
+            <Avatar style={{
+                backgroundColor: avatarColors.background
+            }}>
+                <AvatarLetter style={{color: avatarColors.color}}>{student.fullname[0].toUpperCase()}</AvatarLetter>
+            </Avatar>
             <View style={{flex: 1}}>
-                <FullName>{user.fullname}</FullName>
+                <FullName>{student.fullname}</FullName>
                 <GrayText>{lesson}</GrayText>
             </View>
             <Badge active={active}>{time}</Badge>
@@ -25,17 +31,24 @@ Lessons.defaultProps = {
     items: []
 };
 
+const AvatarLetter = styled.Text`
+  margin-bottom: 1px;
+  font-size: 20px;
+  font-weight: bold;
+`;
+
 const FullName = styled.Text`
   font-weight: 600;
   font-size: 16px;  
 `;
 
 const Avatar = styled.View`
+  align-items:center;
+  justify-content:center;
   margin-right: 15px;
   width: 40px;
   height: 40px;
-  border-radius: 50px;  
-  background-color: yellow;
+  border-radius: 50px;
 `;
 
 const GroupItem = styled.TouchableOpacity`
