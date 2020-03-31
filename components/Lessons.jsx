@@ -6,14 +6,14 @@ import Badge from './Badge';
 import GrayText from "./GrayText";
 
 const Lessons = ({navigate, item}) => {
-    const {user, unit, active, time} = item;
+    const {user, lesson, active, time} = item;
 
     return (
         <GroupItem onPress={navigate.bind(this, 'Student', item)}>
             <Avatar/>
             <View style={{flex: 1}}>
                 <FullName>{user.fullname}</FullName>
-                <GrayText>{unit}</GrayText>
+                <GrayText>{lesson}</GrayText>
             </View>
             <Badge active={active}>{time}</Badge>
         </GroupItem>
@@ -44,11 +44,6 @@ const GroupItem = styled.TouchableOpacity`
   padding: 20px;
   border-bottom-width: 1px;
   border-bottom-color: #f3f3f3;
-`;
-
-const Container = styled.View`
-  flex: 1;
-  margin-top: 50px;  
 `;
 
 export default Lessons;
