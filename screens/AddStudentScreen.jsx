@@ -51,8 +51,8 @@ const AddStudentScreen = ({navigation}) => {
 
             <ButtonView>
                 <Button onPress={onSubmit} color="#87CC6F">
-                    <Ionicons name="ios-add" size="24" color="white"/>
-                    <Text>Добавить пациента</Text>
+                    <Ionicons name="ios-add" size={24} color="white"/>
+                    <Text>Добавить студента</Text>
                 </Button>
             </ButtonView>
         </Container>

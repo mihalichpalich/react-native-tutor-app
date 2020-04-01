@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import {SectionList} from 'react-native';
+import {SectionList, Text} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import axios from 'axios';
 import Swipeable from 'react-native-swipeable-row';
-import Text from "react-native-web/dist/exports/Text";
 
 import {Lessons, SectionTitle} from '../components';
 import {lessonsApi} from "../utils/api";
