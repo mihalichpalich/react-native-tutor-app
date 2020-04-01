@@ -1,10 +1,9 @@
 import React from "react";
 import styled from 'styled-components/native';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
 
-import {GrayText, Button, Badge} from "../components";
-import Text from "react-native-web/dist/exports/Text";
+import {GrayText, Button, Badge, Container} from "../components";
 
 const StudentScreen = ({navigation, index}) => {
     return (
@@ -84,11 +83,6 @@ const LessonCard = styled.View`
   shadow-opacity: 0.4;
   shadow-radius: 10;
   elevation: 0.5;
-`;
-
-const Container = styled.View`
-  padding: 25px;
-  flex: 1;
 `;
 
 const StudentDetails = styled(Container)`

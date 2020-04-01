@@ -33,7 +33,7 @@ const HomeScreen = ({navigation}) => {
                 <SectionList
                 sections={data}
                 keyExtractor={(item, index) => index}
-                onRefresh={fetchLessons()}
+                onRefresh={fetchLessons}
                 refreshing={isLoading}
                 renderItem={({item}) => (
                     <Swipeable rightButtons={[<Text>Left</Text>,<Text>Right</Text>]}>
@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
                 )}
                 />
             )}
-            <PlusButton>
+            <PlusButton onPress={navigation.navigate.bind(this, 'AddStudent')}>
                 <Ionicons name="ios-add" size={36} color="white"/>
             </PlusButton>
         </Container>
