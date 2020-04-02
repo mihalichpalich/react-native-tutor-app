@@ -1,18 +1,22 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
-import {View, Text} from 'react-native';
+import {View, Text, ActivityIndicator, Linking} from 'react-native';
 import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
 
-import {GrayText, Button, Badge, Container} from "../components";
+import {GrayText, Button, Badge, Container, PlusButton} from "../components";
 import {studentsApi} from "../utils/api";
 
 const StudentScreen = ({navigation, index}) => {
     const [lessons, setLessons] = useState([]);
+    const [isLoading, setisLoading] = useState(true);
 
     useEffect(() => {
         const id = navigation.getParam('student')._id;
         studentsApi.show(id).then(({data}) => {
             setLessons(data.data.lessons);
+            setisLoading(false);
+        }).catch(() => {
+            setisLoading(false);
         });
     }, []);
 
@@ -28,7 +32,7 @@ const StudentScreen = ({navigation, index}) => {
                     </ProgramButtonView>
 
                     <PhoneButtonView>
-                        <Button color="#84d269">
+                        <Button onPress={() => Linking.openURL('tel:' + navigation.getParam('student', {}).phone)} color="#84d269">
                             <Foundation name="telephone" size={22} color="white"/>
                         </Button>
                     </PhoneButtonView>
@@ -37,9 +41,9 @@ const StudentScreen = ({navigation, index}) => {
 
             <StudentLessons>
                 <Container>
-                    {lessons.map(lesson => {
+                    {isLoading ? <ActivityIndicator size="large" color="#2A86FF"/> : lessons.map(lesson => {
                             return(
-                                <LessonCard>
+                                <LessonCard key={lesson._id}>
                                     <MoreButton>
                                         <Ionicons name="md-more" size={24} color="rgba(0, 0, 0, 0.4)"/>
                                     </MoreButton>
@@ -64,6 +68,7 @@ const StudentScreen = ({navigation, index}) => {
                     )}
                 </Container>
             </StudentLessons>
+            <PlusButton onPress={navigation.navigate.bind(this, 'AddLesson')}/>
         </View>
     )
 };
@@ -93,6 +98,7 @@ const LessonCardRow = styled.View`
 
 const LessonCard = styled.View`
   padding: 20px 25px;
+  margin-bottom: 20px;
   background: white;
   border-radius: 10px;
   shadow-color: gray;

@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import {SectionList, Text} from 'react-native';
+import {SectionList, Alert} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import axios from 'axios';
 import Swipeable from 'react-native-swipeable-row';
 
-import {Lessons, SectionTitle} from '../components';
+import {Lessons, SectionTitle, PlusButton} from '../components';
 import {lessonsApi} from "../utils/api";
 
 const HomeScreen = ({navigation}) => {
@@ -26,17 +25,50 @@ const HomeScreen = ({navigation}) => {
 
     useEffect(fetchLessons, []);
 
+    const removeLesson = id => {
+        Alert.alert(
+          'Удаление приема',
+          'Вы действительно хотите удалить прием?',
+          [
+            {text: 'Отмена', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Удалить', onPress: () => {
+                    setIsLoading(true);
+
+                    lessonsApi.remove(id).then(() => {
+                        fetchLessons();
+                    }).catch(() => {
+                        setIsLoading(false);
+                    });
+                }
+            },
+          ],
+          { cancelable: false }
+        );
+
+
+    };
+
     return (
         <Container>
             {data && (
                 <SectionList
                 sections={data}
-                keyExtractor={(item, index) => index}
+                keyExtractor={item => item._id}
                 onRefresh={fetchLessons}
                 refreshing={isLoading}
                 renderItem={({item}) => (
-                    <Swipeable rightButtons={[<Text>Left</Text>,<Text>Right</Text>]}>
-                        <Lessons navigate={navigation.navigate} item={item}/>
+                    <Swipeable
+                        rightButtons={[
+                            <SwipeViewButton style={{ backgroundColor: '#B4C1CB'}}>
+                                <Ionicons name="md-create" size={28} color="white"/>
+                            </SwipeViewButton>,
+                            <SwipeViewButton onPress={removeLesson.bind(this, item._id)}
+                                             style={{ backgroundColor: '#F85A5A'}}
+                            >
+                                <Ionicons name="ios-close" size={48} color="white"/>
+                            </SwipeViewButton>
+                    ]}>
+                        <Lessons onRemove={removeLesson} navigate={navigation.navigate} item={item}/>
                     </Swipeable>
                 )}
                 renderSectionHeader={({section: {title}}) => (
@@ -44,15 +76,13 @@ const HomeScreen = ({navigation}) => {
                 )}
                 />
             )}
-            <PlusButton onPress={navigation.navigate.bind(this, 'AddStudent')}>
-                <Ionicons name="ios-add" size={36} color="white"/>
-            </PlusButton>
+            <PlusButton onPress={navigation.navigate.bind(this, 'AddStudent')}/>
         </Container>
     )
 };
 
 HomeScreen.navigationOptions = {
-    title: "Студенты",
+    title: "Журнал студентов",
     headerTintColor: '#2A86FF',
     headerStyle: {
         elevation: 0.8,
@@ -60,25 +90,12 @@ HomeScreen.navigationOptions = {
     }
 };
 
-const SwipeView = styled.View`
-  background-color: red;
-  
-`;
-
-const PlusButton = styled.TouchableOpacity`
-  width: 64px;
-  height: 64px;
-  align-items: center;
+const SwipeViewButton = styled.TouchableOpacity`
+  display: flex;
+  width: 75px;
+  height: 100%;
   justify-content: center;
-  position: absolute;
-  right: 25px;
-  bottom: 25px;
-  border-radius: 50px;
-  background: #2a86ff;
-  shadow-color: #2a86ff;
-  shadow-opacity: 0.4;
-  shadow-radius: 3.5;
-  elevation: 4;
+  align-items: center;
 `;
 
 const Container = styled.View`

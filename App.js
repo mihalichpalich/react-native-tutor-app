@@ -2,7 +2,7 @@ import React from 'react';
 import {createAppContainer} from "react-navigation";
 import {createStackNavigator} from "react-navigation-stack";
 
-import {HomeScreen, StudentScreen, AddStudentScreen} from "./screens";
+import {HomeScreen, StudentScreen, AddStudentScreen, AddLessonScreen} from "./screens";
 
 const AppNavigator = createStackNavigator(
     {
@@ -14,6 +14,9 @@ const AppNavigator = createStackNavigator(
         },
         AddStudent: {
             screen: AddStudentScreen
+        },
+        AddLesson: {
+            screen: AddLessonScreen
         }
     },
     {
