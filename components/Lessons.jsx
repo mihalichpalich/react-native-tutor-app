@@ -7,7 +7,7 @@ import GrayText from "./GrayText";
 import getAvatarColor from "../utils/getAvatarColor";
 
 const Lessons = ({navigate, item}) => {
-    const {student, lesson, active, time} = item;
+    const {student, unit, active, time} = item;
     const avatarColors = getAvatarColor(student.fullname[0].toUpperCase());
 
     return (
@@ -19,7 +19,7 @@ const Lessons = ({navigate, item}) => {
             </Avatar>
             <View style={{flex: 1}}>
                 <FullName>{student.fullname}</FullName>
-                <GrayText>{lesson}</GrayText>
+                <GrayText>{unit}</GrayText>
             </View>
             <Badge active={active}>{time}</Badge>
         </GroupItem>

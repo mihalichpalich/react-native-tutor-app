@@ -1,16 +1,26 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
 import {View, Text} from 'react-native';
 import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
 
 import {GrayText, Button, Badge, Container} from "../components";
+import {studentsApi} from "../utils/api";
 
 const StudentScreen = ({navigation, index}) => {
+    const [lessons, setLessons] = useState([]);
+
+    useEffect(() => {
+        const id = navigation.getParam('student')._id;
+        studentsApi.show(id).then(({data}) => {
+            setLessons(data.data.lessons);
+        });
+    }, []);
+
     return (
         <View style={{flex: 1}}>
             <StudentDetails>
-                <StudentFullname>{navigation.getParam('user', {}).fullname}</StudentFullname>
-                <GrayText>{navigation.getParam('user', {}).phone}</GrayText>
+                <StudentFullname>{navigation.getParam('student', {}).fullname}</StudentFullname>
+                <GrayText>{navigation.getParam('student', {}).phone}</GrayText>
 
                 <StudentButtons>
                     <ProgramButtonView>
@@ -27,25 +37,31 @@ const StudentScreen = ({navigation, index}) => {
 
             <StudentLessons>
                 <Container>
-                    <LessonCard>
-                        <MoreButton>
-                            <Ionicons name="md-more" size={24} color="rgba(0, 0, 0, 0.4)"/>
-                        </MoreButton>
+                    {lessons.map(lesson => {
+                            return(
+                                <LessonCard>
+                                    <MoreButton>
+                                        <Ionicons name="md-more" size={24} color="rgba(0, 0, 0, 0.4)"/>
+                                    </MoreButton>
 
-                        <LessonCardRow>
-                            <MaterialIcons name="school" size={16} color="#a3a3a3"/>
-                            <LessonCardLabel><Text style={{fontWeight: '800'}}>Занятие {index}</Text></LessonCardLabel>
-                        </LessonCardRow>
+                                    <LessonCardRow>
+                                        <MaterialIcons name="school" size={16} color="#a3a3a3"/>
+                                        <LessonCardLabel><Text
+                                            style={{fontWeight: '800'}}>Занятие {index}</Text></LessonCardLabel>
+                                    </LessonCardRow>
 
-                        <LessonCardRow>
-                            <Foundation name="clipboard-notes" size={16} color="#a3a3a3"/>
-                            <LessonCardLabel>Базы данных</LessonCardLabel>
-                        </LessonCardRow>
+                                    <LessonCardRow>
+                                        <Foundation name="clipboard-notes" size={16} color="#a3a3a3"/>
+                                        <LessonCardLabel>{lesson.unit}</LessonCardLabel>
+                                    </LessonCardRow>
 
-                        <LessonCardRow style={{marginTop: 15, justifyContent: 'space-between'}}>
-                            <Badge style={{width: 150}} active>11.10.2019 - 15:40</Badge>
-                        </LessonCardRow>
-                    </LessonCard>
+                                    <LessonCardRow style={{marginTop: 15, justifyContent: 'space-between'}}>
+                                        <Badge style={{width: 150}} active>{lesson.date} - {lesson.time}</Badge>
+                                    </LessonCardRow>
+                                </LessonCard>
+                            )
+                        }
+                    )}
                 </Container>
             </StudentLessons>
         </View>
