@@ -21,7 +21,7 @@ const Lessons = ({navigate, item}) => {
                 <FullName>{student.fullname}</FullName>
                 <GrayText>{unit}</GrayText>
             </View>
-            <Badge active={active}>{time}</Badge>
+            {time && <Badge active={active}>{time}</Badge>}
         </GroupItem>
     );
 };

@@ -4,7 +4,7 @@ import {View, Text, ActivityIndicator, Linking} from 'react-native';
 import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
 
 import {GrayText, Button, Badge, Container, PlusButton} from "../components";
-import {studentsApi} from "../utils/api";
+import {studentsApi, phoneFormat} from "../utils";
 
 const StudentScreen = ({navigation, index}) => {
     const [lessons, setLessons] = useState([]);
@@ -24,7 +24,7 @@ const StudentScreen = ({navigation, index}) => {
         <View style={{flex: 1}}>
             <StudentDetails>
                 <StudentFullname>{navigation.getParam('student', {}).fullname}</StudentFullname>
-                <GrayText>{navigation.getParam('student', {}).phone}</GrayText>
+                <GrayText>{phoneFormat(navigation.getParam('student', {}).phone)}</GrayText>
 
                 <StudentButtons>
                     <ProgramButtonView>
@@ -68,7 +68,11 @@ const StudentScreen = ({navigation, index}) => {
                     )}
                 </Container>
             </StudentLessons>
-            <PlusButton onPress={navigation.navigate.bind(this, 'AddLesson')}/>
+            <PlusButton onPress={
+                    navigation.navigate.bind(this, 'AddLesson',
+                    {studentId: navigation.getParam('student', {})._id})
+                }
+            />
         </View>
     )
 };
@@ -108,7 +112,7 @@ const LessonCard = styled.View`
 `;
 
 const StudentDetails = styled(Container)`
-  flex: 0.3%;
+  flex: 0.3;
 `;
 
 const StudentLessons = styled.View`

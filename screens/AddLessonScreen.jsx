@@ -1,28 +1,49 @@
 import React, {useState} from "react";
 import styled from 'styled-components/native';
 import {Text, View} from 'react-native';
-import { Item, Input, Label, DatePicker } from 'native-base';
-import {Ionicons} from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Item, Input, Label } from 'native-base';
+import DatePicker from 'react-native-datepicker';
 
 import {Button, Container} from '../components';
-import {studentsApi} from "../utils/api";
+import {lessonsApi} from "../utils/api";
 
 const AddLessonScreen = ({navigation}) => {
-    const [values, setValues] = useState({});
+    const [values, setValues] = useState({
+        unit: '',
+        date: null,
+        time: null,
+        student: navigation.getParam('studentId')
+    });
 
-    const handleChange = (name, e) => {
-        const text = e.nativeEvent.text;
+    const fieldsName = {
+        unit: 'Название урока',
+        date: "Дата",
+        time: "Время"
+    };
 
+    const setFieldValue = (name, value) => {
         setValues({
             ...values,
-            [name]: text
+            [name]: value
         });
     };
 
+    const handleInputChange = (name, e) => {
+        const text = e.nativeEvent.text;
+        setFieldValue(name, text)
+    };
+
     const onSubmit = () => {
-        studentsApi.add(values).then(() => {
-            navigation.navigate('Home');
+        lessonsApi.add(values).then(() => {
+            navigation.navigate('Home', {lastUpdate: new Date()});
+        })
+            .catch(e => {
+                if (e.response.data && e.response.data.message) {
+                    e.response.data.message.forEach(err => {
+                        const fieldName = err.param;
+                        alert(`Ошибка! Поле "${fieldsName[fieldName]}" пустое либо указано неверно.`);
+                    });
+                }
         });
     };
 
@@ -31,7 +52,7 @@ const AddLessonScreen = ({navigation}) => {
             <Item style={{marginLeft: 0}} floatingLabel>
                 <Label>Название урока</Label>
                 <Input
-                    onChange={handleChange.bind(this, 'unit')}
+                    onChange={handleInputChange.bind(this, 'unit')}
                     value={values.fullname}
                     autoFocus
                     clearButtonMode
@@ -39,31 +60,55 @@ const AddLessonScreen = ({navigation}) => {
                 />
             </Item>
 
-            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
-                <Label>Номер телефона</Label>
-                <Input
-                    onChange={handleChange.bind(this, 'phone')}
-                    value={values.phone}
-                    keyboardType="numeric"
-                    dataDetectorTypes="phoneNumber"
-                    clearButtonMode style={{marginTop: 12}}
-                />
-            </Item>
-
             <Item style={{marginTop: 20, marginLeft: 0}}>
                 <TimeRow>
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="date"
-                        is24Hour="true"
-                        display="default"
-                    />
+                    <View style={{flex: 1}}>
+                        <DatePicker
+                            mode="date"
+                            placeholder="Дата"
+                            format="YYYY-MM-DD"
+                            minDate={new Date()}
+                            confirmBtnText="Сохранить"
+                            cancelBtnText="Отмена"
+                            showIcon={false}
+                            customStyles={{
+                                dateInput: {
+                                    borderWidth: 0
+                                },
+                                dateText: {
+                                    fontSize: 18
+                                }
+                            }}
+                            date={values.date}
+                            onDateChange={setFieldValue.bind(this, 'date')}
+                          />
+                    </View>
+                    <View style={{flex: 1}}>
+                        <DatePicker
+                            mode="time"
+                            placeholder="Время"
+                            format="HH:mm"
+                            minDate={new Date()}
+                            confirmBtnText="Сохранить"
+                            cancelBtnText="Отмена"
+                            showIcon={false}
+                            customStyles={{
+                                dateInput: {
+                                    borderWidth: 0
+                                },
+                                dateText: {
+                                    fontSize: 18
+                                }
+                            }}
+                            date={values.time}
+                            onDateChange={setFieldValue.bind(this, 'time')}
+                          />
+                    </View>
                 </TimeRow>
             </Item>
 
             <ButtonView>
                 <Button onPress={onSubmit} color="#87CC6F">
-                    <Ionicons name="ios-add" size={24} color="white"/>
                     <Text>Добавить урок</Text>
                 </Button>
             </ButtonView>

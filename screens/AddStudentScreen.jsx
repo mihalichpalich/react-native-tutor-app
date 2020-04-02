@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import styled from 'styled-components/native';
 import {Text} from 'react-native';
 import { Item, Input, Label } from 'native-base';
-import {Ionicons} from '@expo/vector-icons';
 
 import {Button, Container} from '../components';
 import {studentsApi} from "../utils/api";
@@ -51,7 +50,6 @@ const AddStudentScreen = ({navigation}) => {
 
             <ButtonView>
                 <Button onPress={onSubmit} color="#87CC6F">
-                    <Ionicons name="ios-add" size={24} color="white"/>
                     <Text>Добавить студента</Text>
                 </Button>
             </ButtonView>

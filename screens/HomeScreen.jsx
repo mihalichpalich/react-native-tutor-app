@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import {SectionList, Alert} from 'react-native';
+import {SectionList, Alert, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Swipeable from 'react-native-swipeable-row';
 
 import {Lessons, SectionTitle, PlusButton} from '../components';
 import {lessonsApi} from "../utils/api";
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = (props) => {
+    const {navigation} = props;
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [lastUpdateTime, setLastUpdateTime] = useState(null);
 
     const fetchLessons = () => {
         setIsLoading(true);
@@ -18,12 +20,14 @@ const HomeScreen = ({navigation}) => {
             setData(data.data);
             setIsLoading(false);
         })
-            .catch(e => {
+            .finally(e => {
                 setIsLoading(false);
             });
     };
 
-    useEffect(fetchLessons, []);
+    useEffect(fetchLessons, [lastUpdateTime]);
+
+    useEffect(fetchLessons, [navigation.state.params]);
 
     const removeLesson = id => {
         Alert.alert(
@@ -81,14 +85,19 @@ const HomeScreen = ({navigation}) => {
     )
 };
 
-HomeScreen.navigationOptions = {
-    title: "Журнал студентов",
+HomeScreen.navigationOptions = ({navigation}) => ({
+    title: "Журнал уроков",
     headerTintColor: '#2A86FF',
     headerStyle: {
         elevation: 0.8,
         shadowOpacity: 0.8
-    }
-};
+    },
+    headerRight: () => (
+        <TouchableOpacity onPress={navigation.navigate.bind(this, 'Students')} style={{marginRight: 20}}>
+            <Ionicons name="md-people" size={28} color="black"/>
+        </TouchableOpacity>
+    )
+});
 
 const SwipeViewButton = styled.TouchableOpacity`
   display: flex;
