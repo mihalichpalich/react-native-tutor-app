@@ -1,24 +1,51 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
-import {View, Text, ActivityIndicator, Linking} from 'react-native';
+import {View, Text, ActivityIndicator, Linking, Alert} from 'react-native';
 import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
 
 import {GrayText, Button, Badge, Container, PlusButton} from "../components";
-import {studentsApi, phoneFormat} from "../utils";
+import {studentsApi, phoneFormat, lessonsApi} from "../utils";
 
 const StudentScreen = ({navigation, index}) => {
     const [lessons, setLessons] = useState([]);
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const id = navigation.getParam('student')._id;
         studentsApi.show(id).then(({data}) => {
             setLessons(data.data.lessons);
-            setisLoading(false);
+            setIsLoading(false);
         }).catch(() => {
-            setisLoading(false);
+            setIsLoading(false);
         });
     }, []);
+
+    const removeLesson = id => {
+        Alert.alert(
+          'Удаление урока',
+          'Вы действительно хотите удалить урок?',
+          [
+            {text: 'Отмена', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Удалить', onPress: () => {
+                    setIsLoading(true);
+
+                    lessonsApi.remove(id).then(() => {
+                        const id = navigation.getParam('student')._id;
+                        studentsApi.show(id).then(({data}) => {
+                            setLessons(data.data.lessons);
+                            setIsLoading(false);
+                        }).catch(() => {
+                            setIsLoading(false);
+                        });
+                    }).catch(() => {
+                        setIsLoading(false);
+                    });
+                }
+            },
+          ],
+          { cancelable: false }
+        );
+    };
 
     return (
         <View style={{flex: 1}}>
@@ -44,15 +71,15 @@ const StudentScreen = ({navigation, index}) => {
                     {isLoading ? <ActivityIndicator size="large" color="#2A86FF"/> : lessons.map(lesson => {
                             return(
                                 <LessonCard key={lesson._id}>
-                                    <MoreButton>
-                                        <Ionicons name="md-more" size={24} color="rgba(0, 0, 0, 0.4)"/>
+                                    <MoreButton onPress={removeLesson.bind(this, lesson._id)}>
+                                        <Ionicons name="md-close" size={24} color="red"/>
                                     </MoreButton>
 
-                                    <LessonCardRow>
-                                        <MaterialIcons name="school" size={16} color="#a3a3a3"/>
-                                        <LessonCardLabel><Text
-                                            style={{fontWeight: '800'}}>Занятие {index}</Text></LessonCardLabel>
-                                    </LessonCardRow>
+                                    {/*<LessonCardRow>*/}
+                                        {/*<MaterialIcons name="school" size={16} color="#a3a3a3"/>*/}
+                                        {/*<LessonCardLabel><Text*/}
+                                            {/*style={{fontWeight: '800'}}>Занятие {index}</Text></LessonCardLabel>*/}
+                                    {/*</LessonCardRow>*/}
 
                                     <LessonCardRow>
                                         <Foundation name="clipboard-notes" size={16} color="#a3a3a3"/>

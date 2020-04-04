@@ -36,8 +36,8 @@ const StudentsScreen = props => {
 
   const removeStudent = id => {
     Alert.alert(
-      'Удаление урока',
-      'Вы действительно хотите удалить урок?',
+      'Удаление студента',
+      'Вы действительно хотите удалить студента?',
       [
         {
           text: 'Отмена',
@@ -100,7 +100,7 @@ const StudentsScreen = props => {
                   navigate={navigation.navigate}
                   item={{
                     student: item,
-                    phone: phoneFormat(item.phone)
+                    unit: phoneFormat(item.phone)
                   }}
                 />
               </Swipeable>

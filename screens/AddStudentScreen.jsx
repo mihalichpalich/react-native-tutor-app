@@ -9,8 +9,6 @@ import {studentsApi} from "../utils/api";
 const AddStudentScreen = ({navigation}) => {
     const [values, setValues] = useState({});
 
-    // console.log(JSON.stringify(navigation));
-
     const handleChange = (name, e) => {
         const text = e.nativeEvent.text;
 

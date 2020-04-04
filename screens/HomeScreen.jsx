@@ -31,8 +31,8 @@ const HomeScreen = (props) => {
 
     const removeLesson = id => {
         Alert.alert(
-          'Удаление приема',
-          'Вы действительно хотите удалить прием?',
+          'Удаление урока',
+          'Вы действительно хотите удалить урок?',
           [
             {text: 'Отмена', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
             {text: 'Удалить', onPress: () => {
