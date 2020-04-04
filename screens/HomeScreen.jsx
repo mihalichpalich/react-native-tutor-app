@@ -48,8 +48,16 @@ const HomeScreen = (props) => {
           ],
           { cancelable: false }
         );
+    };
 
+    const updateLesson = (id, values) => {
+        setIsLoading(true);
 
+        lessonsApi.update(id, values).then(() => {
+            fetchLessons();
+        }).catch(() => {
+            setIsLoading(false);
+        });
     };
 
     return (
@@ -63,7 +71,9 @@ const HomeScreen = (props) => {
                 renderItem={({item}) => (
                     <Swipeable
                         rightButtons={[
-                            <SwipeViewButton style={{ backgroundColor: '#B4C1CB'}}>
+                            <SwipeViewButton onPress={navigation.navigate.bind(this, 'EditLesson',
+                                                    {lessonId: navigation.getParam('_id', {})})}
+                                             style={{ backgroundColor: '#B4C1CB'}}>
                                 <Ionicons name="md-create" size={28} color="white"/>
                             </SwipeViewButton>,
                             <SwipeViewButton onPress={removeLesson.bind(this, item._id)}

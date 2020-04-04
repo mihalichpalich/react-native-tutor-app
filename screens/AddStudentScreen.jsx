@@ -9,6 +9,8 @@ import {studentsApi} from "../utils/api";
 const AddStudentScreen = ({navigation}) => {
     const [values, setValues] = useState({});
 
+    // console.log(JSON.stringify(navigation));
+
     const handleChange = (name, e) => {
         const text = e.nativeEvent.text;
 
@@ -20,7 +22,13 @@ const AddStudentScreen = ({navigation}) => {
 
     const onSubmit = () => {
         studentsApi.add(values).then(() => {
-            navigation.navigate('Home');
+            studentsApi
+                .getByPhone(values.phone)
+                .then(({ data }) => {
+                    navigation.navigate('Student', data.data);
+                }).catch(e => {
+                    console.log(e);
+                });
         });
     };
 
