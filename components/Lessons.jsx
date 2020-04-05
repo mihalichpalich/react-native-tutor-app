@@ -1,14 +1,27 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import styled from 'styled-components/native';
+import dayjs from 'dayjs';
 
 import Badge from './Badge';
 import GrayText from "./GrayText";
 import getAvatarColor from "../utils/getAvatarColor";
 
 const Lessons = ({navigate, item}) => {
-    const {student, unit, active, time} = item;
+    const {student, unit, date, time} = item;
     const avatarColors = getAvatarColor(student.fullname[0].toUpperCase());
+
+    let dateNow = dayjs(new Date()).format("YYYY-MM-DD");
+    let timeNow = dayjs(new Date()).format("HH:mm");
+    let badgeActive = false;
+
+    if (date === dateNow) {
+        if (time >= timeNow) {
+            badgeActive = true;
+        }
+    } else if (date > dateNow) {
+        badgeActive = true;
+    }
 
     return (
         <GroupItem onPress={navigate.bind(this, 'Student', item)}>
@@ -21,7 +34,7 @@ const Lessons = ({navigate, item}) => {
                 <FullName>{student.fullname}</FullName>
                 <GrayText>{unit}</GrayText>
             </View>
-            {time && <Badge active={active}>{time}</Badge>}
+            {time && <Badge active={badgeActive}>{time}</Badge>}
         </GroupItem>
     );
 };
