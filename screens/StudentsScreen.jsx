@@ -85,7 +85,9 @@ const StudentsScreen = props => {
             renderItem={({ item }) => (
               <Swipeable
                 rightButtons={[
-                  <SwipeViewButton style={{ backgroundColor: '#B4C1CB' }}>
+                  <SwipeViewButton style={{ backgroundColor: '#B4C1CB' }}
+                                   onPress={navigation.navigate.bind(this, 'EditStudent', item)}
+                  >
                     <Ionicons name="md-create" size={28} color="white" />
                   </SwipeViewButton>,
                   <SwipeViewButton

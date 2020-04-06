@@ -72,8 +72,7 @@ const HomeScreen = (props) => {
                 renderItem={({item}) => (
                     <Swipeable
                         rightButtons={[
-                            <SwipeViewButton onPress={navigation.navigate.bind(this, 'EditLesson',
-                                                    {lessonId: navigation.getParam('_id', {})})}
+                            <SwipeViewButton onPress={navigation.navigate.bind(this, 'EditLesson', item)}
                                              style={{ backgroundColor: '#B4C1CB'}}>
                                 <Ionicons name="md-create" size={28} color="white"/>
                             </SwipeViewButton>,

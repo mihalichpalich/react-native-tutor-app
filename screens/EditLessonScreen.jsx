@@ -5,25 +5,14 @@ import { Item, Input, Label } from 'native-base';
 import DatePicker from 'react-native-datepicker';
 
 import {Button, Container} from '../components';
-import {lessonsApi, studentsApi} from "../utils/api";
+import {lessonsApi} from "../utils/api";
 
 const EditLessonScreen = ({navigation}) => {
     const [values, setValues] = useState({
-        unit: '',
-        date: null,
-        time: null,
+        unit: navigation.getParam('unit'),
+        date: navigation.getParam('date'),
+        time: navigation.getParam('time')
     });
-
-    const id = navigation.getParam('lessonId');
-
-    // console.log(JSON.stringify(id));
-
-    // lessonsApi.show(id).then(({data}) => {
-    //     setValues({
-    //         ...values,
-    //         [name]: value
-    //     });
-    // });
 
     const fieldsName = {
         unit: 'Название урока',
@@ -44,12 +33,10 @@ const EditLessonScreen = ({navigation}) => {
     };
 
     const onSubmit = () => {
-        lessonsApi.update(id, values).then(() => {
+        lessonsApi.update(navigation.getParam('_id'), values).then(() => {
             navigation.navigate('Home', {lastUpdate: new Date()});
         })
             .catch(e => {
-                // alert(id);
-
                 if (e.response.data && e.response.data.message) {
                     e.response.data.message.forEach(err => {
                         const fieldName = err.param;
@@ -121,7 +108,7 @@ const EditLessonScreen = ({navigation}) => {
             </Item>
 
             <ButtonView>
-                <Button onPress={onSubmit} color="#87CC6F">
+                <Button onPress={onSubmit} color="#2A86FF">
                     <Text>Изменить урок</Text>
                 </Button>
             </ButtonView>

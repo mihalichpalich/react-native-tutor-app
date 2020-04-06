@@ -8,7 +8,8 @@ import {
     AddStudentScreen,
     AddLessonScreen,
     StudentsScreen,
-    EditLessonScreen
+    EditLessonScreen,
+    EditStudentScreen
 } from "./screens";
 
 const AppNavigator = createStackNavigator(
@@ -30,6 +31,9 @@ const AppNavigator = createStackNavigator(
         },
         EditLesson: {
             screen: EditLessonScreen
+        },
+        EditStudent: {
+            screen: EditStudentScreen
         }
     },
     {

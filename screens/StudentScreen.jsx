@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
-import {View, Text, ActivityIndicator, Linking, Alert} from 'react-native';
-import {Foundation, MaterialIcons, Ionicons} from '@expo/vector-icons';
+import {View, ActivityIndicator, Linking, Alert} from 'react-native';
+import {Foundation, Ionicons} from '@expo/vector-icons';
 
 import {GrayText, Button, Badge, Container, PlusButton} from "../components";
 import {studentsApi, phoneFormat, lessonsApi, dateReverse} from "../utils";
@@ -70,8 +70,13 @@ const StudentScreen = ({navigation, index}) => {
             <StudentLessons>
                 <Container>
                     {isLoading ? <ActivityIndicator size="large" color="#2A86FF"/> : lessons.map(lesson => {
-                            let dateNow = dayjs(new Date()).format("YYYY-MM-DD");
-                            let timeNow = dayjs(new Date()).format("HH:mm");
+                            Date.prototype.addHours= function(h){
+                                this.setHours(this.getHours()+h);
+                                return this;
+                            };
+
+                            let dateNow = dayjs(new Date().addHours(3)).format("YYYY-MM-DD");
+                            let timeNow = dayjs(new Date().addHours(3)).format("HH:mm");
                             let badgeActive = false;
 
                             if (lesson.date === dateNow) {
@@ -89,7 +94,7 @@ const StudentScreen = ({navigation, index}) => {
                                             <MoreButton style={{right: 0}} onPress={removeLesson.bind(this, lesson._id)}>
                                                 <Ionicons name="md-close" size={24} color="red"/>
                                             </MoreButton>
-                                            <MoreButton style={{right: 25}}>
+                                            <MoreButton style={{right: 25}} onPress={navigation.navigate.bind(this, 'EditLesson', lesson)}>
                                                 <Ionicons name="md-create" size={28} color="green"/>
                                             </MoreButton>
                                         </View>

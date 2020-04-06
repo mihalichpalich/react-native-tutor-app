@@ -11,8 +11,13 @@ const Lessons = ({navigate, item}) => {
     const {student, unit, date, time} = item;
     const avatarColors = getAvatarColor(student.fullname[0].toUpperCase());
 
-    let dateNow = dayjs(new Date()).format("YYYY-MM-DD");
-    let timeNow = dayjs(new Date()).format("HH:mm");
+    Date.prototype.addHours= function(h){
+        this.setHours(this.getHours()+h);
+        return this;
+    };
+
+    let dateNow = dayjs(new Date().addHours(3)).format("YYYY-MM-DD");
+    let timeNow = dayjs(new Date().addHours(3)).format("HH:mm");
     let badgeActive = false;
 
     if (date === dateNow) {
