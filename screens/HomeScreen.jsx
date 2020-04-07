@@ -3,9 +3,8 @@ import styled from 'styled-components/native';
 import {SectionList, Alert, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Swipeable from 'react-native-swipeable-row';
-import dayjs from 'dayjs';
 
-import {Lessons, SectionTitle, PlusButton} from '../components';
+import {Lessons, SectionTitle} from '../components';
 import {lessonsApi} from "../utils/api";
 
 const HomeScreen = (props) => {
@@ -90,7 +89,6 @@ const HomeScreen = (props) => {
                 )}
                 />
             )}
-            <PlusButton onPress={navigation.navigate.bind(this, 'AddStudent')}/>
         </Container>
     )
 };

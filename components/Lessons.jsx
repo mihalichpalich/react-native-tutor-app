@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 
 import Badge from './Badge';
 import GrayText from "./GrayText";
-import getAvatarColor from "../utils/getAvatarColor";
+import {getAvatarColor} from "../utils";
 
 const Lessons = ({navigate, item}) => {
     const {student, unit, date, time} = item;

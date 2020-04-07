@@ -40,10 +40,8 @@ const EditLessonScreen = ({navigation}) => {
                 if (e.response.data && e.response.data.message) {
                     e.response.data.message.forEach(err => {
                         const fieldName = err.param;
-                        alert(`Ошибка! Поле "${fieldsName[fieldName]}" указано неверно.`);
+                        alert(`Ошибка! Поле "${fieldsName[fieldName]}" пустое либо содержит недостаточно символов.`);
                     });
-                } else {
-                    alert("биба");
                 }
         });
     };

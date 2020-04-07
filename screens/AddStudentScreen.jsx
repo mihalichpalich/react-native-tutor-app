@@ -18,16 +18,32 @@ const AddStudentScreen = ({navigation}) => {
         });
     };
 
+    const fieldsName = {
+        fullname: 'Имя и фамилия',
+        phone: "Номер телефона"
+    };
+
     const onSubmit = () => {
         studentsApi.add(values).then(() => {
             studentsApi
                 .getByPhone(values.phone)
-                .then(({ data }) => {
+                .then(({data}) => {
                     navigation.navigate('Student', data.data);
                 }).catch(e => {
-                    console.log(e);
+                console.log(e);
+            });
+        }).catch(e => {
+            if (e.response.data.message.code === 11000) {
+                alert(`Студент с введенным номером телефона уже существует!`);
+            }
+
+            if (e.response.data && e.response.data.message) {
+                e.response.data.message.forEach(err => {
+                    const fieldName = err.param;
+                    alert(`Ошибка! Поле "${fieldsName[fieldName]}" пустое либо содержит недостаточно символов.`);
                 });
-        });
+            }
+        })
     };
 
     return (

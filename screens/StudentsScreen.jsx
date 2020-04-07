@@ -6,7 +6,7 @@ import Swipeable from 'react-native-swipeable-row';
 import { Item, Input } from 'native-base';
 
 import { Lessons, SectionTitle, PlusButton } from '../components';
-import { studentsApi, phoneFormat } from '../utils';
+import { studentsApi } from '../utils';
 
 const StudentsScreen = props => {
   const { navigation } = props;
@@ -102,7 +102,7 @@ const StudentsScreen = props => {
                   navigate={navigation.navigate}
                   item={{
                     student: item,
-                    unit: phoneFormat(item.phone)
+                    unit: item.phone
                   }}
                 />
               </Swipeable>
