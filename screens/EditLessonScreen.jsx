@@ -11,7 +11,10 @@ const EditLessonScreen = ({navigation}) => {
     const [values, setValues] = useState({
         unit: navigation.getParam('unit'),
         date: navigation.getParam('date'),
-        time: navigation.getParam('time')
+        time: navigation.getParam('time'),
+        rate_lesson: navigation.getParam('rate_lesson'),
+        rate_homework: navigation.getParam('rate_homework'),
+        homework: navigation.getParam('homework')
     });
 
     const fieldsName = {
@@ -103,6 +106,38 @@ const EditLessonScreen = ({navigation}) => {
                           />
                     </View>
                 </TimeRow>
+            </Item>
+
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Оценка за урок (от 0 до 5)</Label>
+                <Input
+                    onChange={handleInputChange.bind(this, 'rate_lesson')}
+                    value={values.rate_lesson}
+                    keyboardType="numeric"
+                    clearButtonMode
+                    style={{marginTop: 12}}
+                />
+            </Item>
+
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label style={{fontSize: 16}}>Оценка за домашнее задание (от 0 до 5)</Label>
+                <Input
+                    onChange={handleInputChange.bind(this, 'rate_homework')}
+                    value={values.rate_homework}
+                    keyboardType="numeric"
+                    clearButtonMode
+                    style={{marginTop: 12}}
+                />
+            </Item>
+
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Домашнее задание</Label>
+                <Input
+                    onChange={handleInputChange.bind(this, 'homework')}
+                    value={values.homework}
+                    clearButtonMode
+                    style={{marginTop: 12}}
+                />
             </Item>
 
             <ButtonView>

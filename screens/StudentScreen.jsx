@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
-import {View, ActivityIndicator, Linking, Alert, ScrollView} from 'react-native';
+import {View, ActivityIndicator, Linking, Alert, ScrollView, Text} from 'react-native';
 import {Foundation, Ionicons} from '@expo/vector-icons';
 
-import {GrayText, Button, Badge, Container, PlusButton} from "../components";
+import {GrayText, Button, Badge, Container} from "../components";
 import {studentsApi, lessonsApi, dateReverse} from "../utils";
 
 const StudentScreen = ({navigation, index}) => {
@@ -56,7 +56,11 @@ const StudentScreen = ({navigation, index}) => {
 
                 <StudentButtons>
                     <ProgramButtonView>
-                        <Button>Программа</Button>
+                        <Button onPress={
+                                navigation.navigate.bind(this, 'AddLesson',
+                                {studentId: navigation.getParam('student', {})._id})
+                            }
+                        >Добавить урок</Button>
                     </ProgramButtonView>
 
                     <PhoneButtonView>
@@ -90,16 +94,14 @@ const StudentScreen = ({navigation, index}) => {
 
                                 return(
                                     <LessonCard key={lesson._id}>
-                                        {badgeActive ? (
-                                            <View style={{position: "relative"}}>
-                                                <MoreButton style={{right: 0}} onPress={removeLesson.bind(this, lesson._id)}>
-                                                    <Ionicons name="md-close" size={24} color="red"/>
-                                                </MoreButton>
-                                                <MoreButton style={{right: 25}} onPress={navigation.navigate.bind(this, 'EditLesson', lesson)}>
-                                                    <Ionicons name="md-create" size={28} color="green"/>
-                                                </MoreButton>
-                                            </View>
-                                        ) : null}
+                                        <View style={{position: "relative"}}>
+                                            <MoreButton style={{right: 0}} onPress={removeLesson.bind(this, lesson._id)}>
+                                                <Ionicons name="md-close" size={24} color="red"/>
+                                            </MoreButton>
+                                            <MoreButton style={{right: 25}} onPress={navigation.navigate.bind(this, 'EditLesson', lesson)}>
+                                                <Ionicons name="md-create" size={28} color="green"/>
+                                            </MoreButton>
+                                        </View>
 
                                         {/*<LessonCardRow>*/}
                                             {/*<MaterialIcons name="school" size={16} color="#a3a3a3"/>*/}
@@ -116,6 +118,37 @@ const StudentScreen = ({navigation, index}) => {
                                             <Badge style={{width: 120}} active={badgeActive}>{dateReverse(lesson.date)}</Badge>
                                             <Badge active={badgeActive}>{lesson.time}</Badge>
                                         </LessonCardRow>
+
+                                        {
+                                            (lesson.rate_lesson && lesson.rate_homework) ? (
+                                                <View style={{marginTop: 10}}>
+                                                    {
+                                                        lesson.rate_lesson ? (
+                                                            <LessonCardRow style={{marginTop: 5, justifyContent: 'space-between'}}>
+                                                                <StudentRateTitle>Оценка за урок:</StudentRateTitle>
+                                                                <StudentRate>{lesson.rate_lesson}</StudentRate>
+                                                            </LessonCardRow>
+                                                        ) : null
+                                                    }
+
+                                                    {
+                                                        lesson.rate_homework ? (
+                                                            <LessonCardRow style={{marginTop: 5, justifyContent: 'space-between'}}>
+                                                                <StudentRateTitle>Оценка за домашнее задание:</StudentRateTitle>
+                                                                <StudentRate>{lesson.rate_homework}</StudentRate>
+                                                            </LessonCardRow>
+                                                        ) : null
+                                                    }
+                                                </View>
+                                            ) : null
+                                        }
+
+                                        {
+                                            lesson.homework ? (<View style={{marginTop: 15}}>
+                                                <HomeworkTitle>Домашнее задание:</HomeworkTitle>
+                                                <HomeworkText>{lesson.homework}</HomeworkText>
+                                            </View>) : null
+                                        }
                                     </LessonCard>
                                 )
                             }
@@ -123,14 +156,40 @@ const StudentScreen = ({navigation, index}) => {
                     </Container>
                 </ScrollView>
             </StudentLessons>
-            <PlusButton onPress={
-                    navigation.navigate.bind(this, 'AddLesson',
-                    {studentId: navigation.getParam('student', {})._id})
-                }
-            />
         </View>
     )
 };
+
+const HomeworkText = styled.Text`
+  padding: 3px;
+  border: 1px;
+`;
+
+const HomeworkTitle = styled.Text`
+  text-align: center;
+  background-color: gray;
+  color: white;
+`;
+
+const StudentRate = styled.Text`
+  padding: 5px 7px;
+  text-align: center;
+  background-color: gold;  
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 30px;
+`;
+
+const StudentRateTitle = styled.Text`
+  padding: 5px;
+  text-align: center;
+  background-color: lightsalmon;  
+  border-radius: 18px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 30px;
+`;
 
 const MoreButton = styled.TouchableOpacity`
   display: flex;
@@ -142,14 +201,13 @@ const MoreButton = styled.TouchableOpacity`
 `;
 
 const LessonCardLabel = styled.Text`
-  margin-left: 10px;
+  width: 195px;
+  margin-left: 10px;  
   font-size: 16px;
   color: ${props => props.active ? 'black' : 'gray'};
 `;
 
 const LessonCardRow = styled.View`
-  margin-top: 3.5px;
-  margin-bottom: 3.5px;
   flex-direction: row;
   align-items: center;
 `;

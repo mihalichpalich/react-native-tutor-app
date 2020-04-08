@@ -12,6 +12,9 @@ const AddLessonScreen = ({navigation}) => {
         unit: '',
         date: null,
         time: null,
+        rate_lesson: 0,
+        rate_homework: 0,
+        homework: '',
         student: navigation.getParam('studentId')
     });
 
@@ -105,6 +108,16 @@ const AddLessonScreen = ({navigation}) => {
                           />
                     </View>
                 </TimeRow>
+            </Item>
+
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Домашнее задание</Label>
+                <Input
+                    onChange={handleInputChange.bind(this, 'homework')}
+                    value={values.homework}
+                    clearButtonMode
+                    style={{marginTop: 12}}
+                />
             </Item>
 
             <ButtonView>
