@@ -29,7 +29,14 @@
     },
     "android": {
       "package": "com.myself.tutorapp",
-      "versionCode": 1
-    }
+      "versionCode": 1,
+      "publishBundlePath": "android\\app\\src\\main\\assets\\shell-app.bundle",
+      "publishManifestPath": "android\\app\\src\\main\\assets\\shell-app-manifest.json"
+    },
+    "isDetached": true,
+    "detach": {
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.14.2-sdk36.0.0-ce7e16db-fd5d-4fdd-bdeb-701ba94a04d1.tar.gz"
+    },
+    "scheme": "exp284865bf9d814618be99fb95f8889ae7"
   }
 }

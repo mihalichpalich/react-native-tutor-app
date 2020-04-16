@@ -58,7 +58,6 @@ const AddLessonScreen = ({navigation}) => {
                     onChange={handleInputChange.bind(this, 'unit')}
                     value={values.fullname}
                     autoFocus
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
@@ -115,7 +114,6 @@ const AddLessonScreen = ({navigation}) => {
                 <Input
                     onChange={handleInputChange.bind(this, 'homework')}
                     value={values.homework}
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>

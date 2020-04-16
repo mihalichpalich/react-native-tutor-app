@@ -54,7 +54,6 @@ const AddStudentScreen = ({navigation}) => {
                     onChange={handleChange.bind(this, 'fullname')}
                     value={values.fullname}
                     autoFocus
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
@@ -66,7 +65,7 @@ const AddStudentScreen = ({navigation}) => {
                     value={values.phone}
                     keyboardType="numeric"
                     dataDetectorTypes="phoneNumber"
-                    clearButtonMode style={{marginTop: 12}}
+                    style={{marginTop: 12}}
                 />
             </Item>
 

@@ -56,7 +56,6 @@ const EditLessonScreen = ({navigation}) => {
                 <Input
                     onChange={handleInputChange.bind(this, 'unit')}
                     value={values.unit}
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
@@ -114,7 +113,6 @@ const EditLessonScreen = ({navigation}) => {
                     onChange={handleInputChange.bind(this, 'rate_lesson')}
                     value={values.rate_lesson}
                     keyboardType="numeric"
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
@@ -125,7 +123,6 @@ const EditLessonScreen = ({navigation}) => {
                     onChange={handleInputChange.bind(this, 'rate_homework')}
                     value={values.rate_homework}
                     keyboardType="numeric"
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
@@ -135,7 +132,6 @@ const EditLessonScreen = ({navigation}) => {
                 <Input
                     onChange={handleInputChange.bind(this, 'homework')}
                     value={values.homework}
-                    clearButtonMode
                     style={{marginTop: 12}}
                 />
             </Item>
