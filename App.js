@@ -12,7 +12,9 @@ import {
     EditStudentScreen,
     RegistrationScreen,
     ConfirmationScreen,
-    LoginScreen
+    LoginScreen,
+    ProgramScreen,
+    AddProgramScreen
 } from "./screens";
 
 const AppNavigator = createStackNavigator(
@@ -46,6 +48,12 @@ const AppNavigator = createStackNavigator(
         },
         Login: {
             screen: LoginScreen
+        },
+        Program: {
+            screen: ProgramScreen
+        },
+        AddProgram: {
+            screen: AddProgramScreen
         }
     },
     {

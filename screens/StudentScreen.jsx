@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
-import {View, ActivityIndicator, Linking, Alert, ScrollView, Text} from 'react-native';
+import {View, ActivityIndicator, Linking, Alert, ScrollView} from 'react-native';
 import {Foundation, Ionicons} from '@expo/vector-icons';
 
 import {GrayText, Button, Badge, Container} from "../components";
 import {studentsApi, lessonsApi, dateReverse} from "../utils";
 
-const StudentScreen = ({navigation, index}) => {
+const StudentScreen = ({navigation}) => {
     const [lessons, setLessons] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const id = navigation.getParam('student')._id;
+
         studentsApi.show(id).then(({data}) => {
             setLessons(data.data.lessons);
             setIsLoading(false);
@@ -57,9 +58,13 @@ const StudentScreen = ({navigation, index}) => {
                 <StudentButtons>
                     <ProgramButtonView>
                         <Button onPress={
-                                navigation.navigate.bind(this, 'AddLesson',
-                                {studentId: navigation.getParam('student', {})._id})
-                            }
+                                    navigation.navigate.bind(this, 'AddLesson',
+                                        {
+                                            studentId: navigation.getParam('student', {})._id,
+                                            userId: navigation.getParam('user')
+                                        }
+                                    )
+                                }
                         >Добавить урок</Button>
                     </ProgramButtonView>
 
@@ -80,8 +85,8 @@ const StudentScreen = ({navigation, index}) => {
                                     return this;
                                 };
 
-                                let dateNow = dayjs(new Date().addHours(3)).format("YYYY-MM-DD");
-                                let timeNow = dayjs(new Date().addHours(3)).format("HH:mm");
+                                let dateNow = dayjs(new Date()).format("YYYY-MM-DD");
+                                let timeNow = dayjs(new Date()).format("HH:mm");
                                 let badgeActive = false;
 
                                 if (lesson.date === dateNow) {
@@ -95,19 +100,18 @@ const StudentScreen = ({navigation, index}) => {
                                 return(
                                     <LessonCard key={lesson._id}>
                                         <View style={{position: "relative"}}>
-                                            <MoreButton style={{right: 0}} onPress={removeLesson.bind(this, lesson._id)}>
+                                            <MoreButton style={{right: -20}} onPress={removeLesson.bind(this, lesson._id)}>
                                                 <Ionicons name="md-close" size={24} color="red"/>
                                             </MoreButton>
-                                            <MoreButton style={{right: 25}} onPress={navigation.navigate.bind(this, 'EditLesson', lesson)}>
+                                            <MoreButton style={{right: 5}} onPress={navigation.navigate.bind(this, 'EditLesson', lesson)}>
                                                 <Ionicons name="md-create" size={28} color="green"/>
                                             </MoreButton>
                                         </View>
 
-                                        {/*<LessonCardRow>*/}
-                                            {/*<MaterialIcons name="school" size={16} color="#a3a3a3"/>*/}
-                                            {/*<LessonCardLabel><Text*/}
-                                                {/*style={{fontWeight: '800'}}>Занятие {index}</Text></LessonCardLabel>*/}
-                                        {/*</LessonCardRow>*/}
+                                        <LessonCardRow>
+                                            <Foundation name="book" size={16} color="#a3a3a3"/>
+                                            <LessonCardLabel active={badgeActive} style={{fontWeight: 'bold'}}>{lesson.program_name}</LessonCardLabel>
+                                        </LessonCardRow>
 
                                         <LessonCardRow>
                                             <Foundation name="clipboard-notes" size={16} color="#a3a3a3"/>
@@ -120,7 +124,7 @@ const StudentScreen = ({navigation, index}) => {
                                         </LessonCardRow>
 
                                         {
-                                            (lesson.rate_lesson && lesson.rate_homework) ? (
+                                            (lesson.rate_lesson || lesson.rate_homework) ? (
                                                 <View style={{marginTop: 10}}>
                                                     {
                                                         lesson.rate_lesson ? (
@@ -198,6 +202,7 @@ const MoreButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   position: absolute;
+  top: -15px
 `;
 
 const LessonCardLabel = styled.Text`

@@ -8,8 +8,9 @@ import {studentsApi} from "../utils/api";
 
 const EditStudentScreen = ({navigation}) => {
     const [values, setValues] = useState({
-        'fullname': navigation.getParam('fullname'),
-        'phone': navigation.getParam('phone')
+        fullname: navigation.getParam('fullname'),
+        phone: navigation.getParam('phone'),
+        user: ''
     });
 
     const handleChange = (name, e) => {
@@ -17,7 +18,8 @@ const EditStudentScreen = ({navigation}) => {
 
         setValues({
             ...values,
-            [name]: text
+            [name]: text,
+            user: navigation.getParam('user')
         });
     };
 
@@ -30,7 +32,7 @@ const EditStudentScreen = ({navigation}) => {
         const studentId = navigation.getParam('_id');
 
         studentsApi.update(studentId, values).then(() => {
-            navigation.navigate('Home');
+            navigation.navigate('Students', {user: values.user});
         })
         .catch(e => {
             if (e.response.data.message.code === 11000) {

@@ -1,21 +1,44 @@
 import React, {useEffect, useState} from "react";
 import styled from 'styled-components/native';
 import {Text, View} from 'react-native';
-import { Item, Input, Label } from 'native-base';
+import { Item, Input, Label, Picker } from 'native-base';
 import DatePicker from 'react-native-datepicker';
 
 import {Button, Container} from '../components';
-import {lessonsApi} from "../utils/api";
+import {lessonsApi, programsApi} from "../utils/api";
 
 const EditLessonScreen = ({navigation}) => {
+    const [programNames, setProgramNames] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [values, setValues] = useState({
+        program_name: navigation.getParam('program_name'),
         unit: navigation.getParam('unit'),
         date: navigation.getParam('date'),
         time: navigation.getParam('time'),
         rate_lesson: navigation.getParam('rate_lesson'),
         rate_homework: navigation.getParam('rate_homework'),
-        homework: navigation.getParam('homework')
+        homework: navigation.getParam('homework'),
+        student: navigation.getParam('student'),
+        user: navigation.getParam('user')
     });
+
+    const fetchPrograms = () => {
+        programsApi
+            .get(values.user)
+            .then(({ data }) => {
+                data.data.map(res => {
+                    programNames.push(res.name);
+                });
+                setProgramNames(programNames);
+                setIsLoading(false);
+            })
+            .finally(e => {
+                console.log(e);
+                setIsLoading(false);
+            });
+    };
+
+    useEffect(fetchPrograms, []);
 
     const fieldsName = {
         unit: 'Название урока',
@@ -51,7 +74,21 @@ const EditLessonScreen = ({navigation}) => {
 
     return (
         <Container>
-            <Item style={{marginLeft: 0}} floatingLabel>
+            <Item style={{marginLeft: 0}} picker>
+                <Picker
+                    mode="dropdown"
+                    style={{ width: '100%' }}
+                    onValueChange={setFieldValue.bind(this, 'program_name')}
+                    selectedValue={values.program_name}
+                    placeholder="Выберите учебную программу"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                >
+                    {(programNames && !isLoading) && (programNames.map(name => <Picker.Item label={name} value={name} key={name}/>))}
+                </Picker>
+            </Item>
+
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
                 <Label>Название урока</Label>
                 <Input
                     onChange={handleInputChange.bind(this, 'unit')}

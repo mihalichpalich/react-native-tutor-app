@@ -14,7 +14,8 @@ const AddStudentScreen = ({navigation}) => {
 
         setValues({
             ...values,
-            [name]: text
+            [name]: text,
+            user: navigation.state.params.user
         });
     };
 
@@ -28,7 +29,7 @@ const AddStudentScreen = ({navigation}) => {
             studentsApi
                 .getByPhone(values.phone)
                 .then(({data}) => {
-                    navigation.navigate('Student', data.data);
+                    navigation.navigate('Students', {user: values.user});
                 }).catch(e => {
                 console.log(e);
             });

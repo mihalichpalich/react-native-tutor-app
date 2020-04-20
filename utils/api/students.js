@@ -1,7 +1,7 @@
 import axios from '../../core/axios';
 
 export default {
-  get: () => axios.get('/students'),
+  get: userId => axios.get('/students/all/' + userId),
   add: values => axios.post('/students', values),
   show: id => axios.get('/students/' + id),
   remove: id => axios.delete('/students/' + id),

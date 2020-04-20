@@ -13,7 +13,4 @@ axios.defaults.baseURL =
 
 // axios.defaults.baseURL = 'http://localhost:3000';
 
-axios.defaults.headers.common['token'] = window.token;
-window.axios = axios;
-
 export default axios;

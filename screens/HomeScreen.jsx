@@ -4,19 +4,18 @@ import {SectionList, Alert, TouchableOpacity} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Swipeable from 'react-native-swipeable-row';
 
-import {Lessons, SectionTitle} from '../components';
+import {Lessons, SectionTitle, HeaderButtons} from '../components';
 import {lessonsApi} from "../utils/api";
 
 const HomeScreen = (props) => {
     const {navigation} = props;
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [lastUpdateTime, setLastUpdateTime] = useState(null);
 
     const fetchLessons = () => {
         setIsLoading(true);
 
-        lessonsApi.get().then(({data}) => {
+        lessonsApi.get(navigation.state.params.user).then(({data}) => {
             setData(data.data);
             setIsLoading(false);
         })
@@ -25,7 +24,7 @@ const HomeScreen = (props) => {
             });
     };
 
-    useEffect(fetchLessons, [lastUpdateTime]);
+    useEffect(fetchLessons, []);
 
     useEffect(fetchLessons, [navigation.state.params]);
 
@@ -48,16 +47,6 @@ const HomeScreen = (props) => {
           ],
           { cancelable: false }
         );
-    };
-
-    const updateLesson = (id, values) => {
-        setIsLoading(true);
-
-        lessonsApi.update(id, values).then(() => {
-            fetchLessons();
-        }).catch(() => {
-            setIsLoading(false);
-        });
     };
 
     return (
@@ -100,10 +89,20 @@ HomeScreen.navigationOptions = ({navigation}) => ({
         elevation: 0.8,
         shadowOpacity: 0.8
     },
+    headerLeft: null,
     headerRight: () => (
-        <TouchableOpacity onPress={navigation.navigate.bind(this, 'Students')} style={{marginRight: 20}}>
-            <Ionicons name="md-people" size={28} color="black"/>
-        </TouchableOpacity>
+        <HeaderButtons>
+            <TouchableOpacity
+                onPress={navigation.navigate.bind(this, 'Students', {user: navigation.state.params.user})}
+                style={{marginRight: 10}}
+            >
+                <Ionicons name="md-people" size={28} color="black"/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={navigation.navigate.bind(this, 'Program', {user: navigation.state.params.user})}>
+                <Ionicons name="md-school" size={28} color="black"/>
+            </TouchableOpacity>
+        </HeaderButtons>
     )
 });
 

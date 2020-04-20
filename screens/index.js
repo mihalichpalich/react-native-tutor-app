@@ -8,3 +8,6 @@ export {default as EditStudentScreen} from './EditStudentScreen';
 export {default as RegistrationScreen} from './RegistrationScreen';
 export {default as ConfirmationScreen} from './ConfirmationScreen';
 export {default as LoginScreen} from './LoginScreen';
+export {default as ProgramScreen} from './ProgramScreen';
+export {default as AddProgramScreen} from './AddProgramScreen';
+

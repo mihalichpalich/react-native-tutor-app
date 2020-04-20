@@ -8,7 +8,7 @@ import GrayText from "./GrayText";
 import {getAvatarColor} from "../utils";
 
 const Lessons = ({navigate, item}) => {
-    const {student, unit, date, time} = item;
+    const {student, program_name, unit, date, time} = item;
     const avatarColors = getAvatarColor(student.fullname[0].toUpperCase());
 
     Date.prototype.addHours= function(h){
@@ -16,8 +16,8 @@ const Lessons = ({navigate, item}) => {
         return this;
     };
 
-    let dateNow = dayjs(new Date().addHours(3)).format("YYYY-MM-DD");
-    let timeNow = dayjs(new Date().addHours(3)).format("HH:mm");
+    let dateNow = dayjs(new Date()).format("YYYY-MM-DD");
+    let timeNow = dayjs(new Date()).format("HH:mm");
     let badgeActive = false;
 
     if (date === dateNow) {
@@ -37,6 +37,7 @@ const Lessons = ({navigate, item}) => {
             </Avatar>
             <View style={{flex: 1}}>
                 <FullName>{student.fullname}</FullName>
+                {program_name && <Text style={{fontSize: 15}}>{program_name}</Text>}
                 <GrayText>{unit}</GrayText>
             </View>
             {time && <Badge active={badgeActive}>{time}</Badge>}
@@ -56,8 +57,8 @@ const AvatarLetter = styled.Text`
 `;
 
 const FullName = styled.Text`
-  font-weight: 600;
-  font-size: 16px;  
+  font-weight: bold;
+  font-size: 17px;  
 `;
 
 const Avatar = styled.View`

@@ -4,7 +4,7 @@ import {Text, View} from 'react-native';
 import { Item, Input, Label } from 'native-base';
 
 import {Button, Container} from '../components';
-import {usersApi} from "../utils/api";
+import {usersApi, programsApi, lessonsApi} from "../utils/api";
 
 const LoginScreen = ({navigation}) => {
     const [values, setValues] = useState({
@@ -34,16 +34,36 @@ const LoginScreen = ({navigation}) => {
             if (res.status === 404) {
                 alert('Введен неправильный номер телефона или пароль');
             } else if (res.status === 200) {
-                window.axios.defaults.headers.common['token'] = res.data.token;
-                window.localStorage['token'] = res.data.token;
-
                 usersApi
                     .getByPhone(values.phone)
                     .then(({data}) => {
-                        navigation.navigate('Students', data.data);
-                    }).catch(e => {
-                    console.log(e);
-                });
+                        const userId = data.data.user._id;
+
+                        programsApi.get(userId)
+                            .then(({data}) => {
+                                if (data.data.length == 0) {
+                                    navigation.navigate('Program', {user: userId});
+                                } else {
+                                    lessonsApi.get(userId)
+                                        .then(({data}) => {
+                                            if (data.data.length == 0) {
+                                                navigation.navigate('Students', {user: userId});
+                                            } else {
+                                                navigation.navigate('Home', {user: userId});
+                                            }
+                                        })
+                                        .catch(e => {
+                                            console.log(e);
+                                        });
+                                }
+                            })
+                            .catch(e => {
+                                console.log(e);
+                            });
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
             }
         })
             .catch(
