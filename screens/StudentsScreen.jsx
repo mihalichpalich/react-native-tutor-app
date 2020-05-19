@@ -150,7 +150,7 @@ StudentsScreen.navigationOptions = ({navigation}) => ({
                 <Ionicons name="md-school" size={28} color="black"/>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={navigation.navigate.bind(this, 'Home')}>
+            <TouchableOpacity onPress={navigation.navigate.bind(this, 'Home', {user: navigation.state.params.user})}>
                 <Ionicons name="md-home" size={28} color="black"/>
             </TouchableOpacity>
         </HeaderButtons>

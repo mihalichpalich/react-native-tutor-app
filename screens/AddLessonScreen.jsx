@@ -22,8 +22,6 @@ const AddLessonScreen = ({navigation}) => {
         user: navigation.getParam('userId')
     });
 
-    console.log(values.student);
-
     const fieldsName = {
         unit: 'Название урока',
         date: "Дата",
@@ -62,7 +60,7 @@ const AddLessonScreen = ({navigation}) => {
 
     const onSubmit = () => {
         lessonsApi.add(values).then(() => {
-            navigation.navigate('Home', {lastUpdate: new Date(), user: values.user});
+            navigation.navigate('Home', {user: values.user});
         })
             .catch(e => {
                 if (e.response.data && e.response.data.message) {

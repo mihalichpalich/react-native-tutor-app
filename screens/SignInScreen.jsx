@@ -2,31 +2,35 @@ import React, {useState} from "react";
 import styled from 'styled-components/native';
 import {Text, View} from 'react-native';
 import { Item, Input, Label } from 'native-base';
+import * as Google from 'expo-google-app-auth';
 
 import {Button, Container} from '../components';
 import {usersApi, programsApi, lessonsApi} from "../utils/api";
 
-const LoginScreen = ({navigation}) => {
+const SignInScreen = ({navigation}) => {
     const [values, setValues] = useState({
-        phone: '',
-        password: ''
+        email: '',
+        googleID: ''
     });
 
-    const fieldsName = {
-        phone: 'Телефон',
-        password: "Пароль"
-    };
+    const signIn = async function signInWithGoogleAsync() {
+        try {
+            const result = await Google.logInAsync({
+                androidClientId: "588758140087-i1d4o42r9i56cbcdift9679trblfrtv8.apps.googleusercontent.com",
+                scopes: ['profile', 'email'],
+            });
 
-    const setFieldValue = (name, value) => {
-        setValues({
-            ...values,
-            [name]: value
-        });
-    };
-
-    const handleInputChange = (name, e) => {
-        const text = e.nativeEvent.text;
-        setFieldValue(name, text)
+            if (result.type === 'success') {
+                setValues({
+                    email: result.user.email,
+                    googleID: result.user.id
+                });
+            } else {
+                console.log('cancelled');
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const onSubmit = () => {
@@ -129,7 +133,7 @@ const RegisterLink = styled.Text`
   color: dodgerblue;
 `;
 
-LoginScreen.navigationOptions = {
+SignInScreen.navigationOptions = {
     title: "Вход",
     headerTintColor: '#2A86FF',
     headerStyle: {
@@ -138,4 +142,4 @@ LoginScreen.navigationOptions = {
     }
 };
 
-export default LoginScreen;
+export default SignInScreen;

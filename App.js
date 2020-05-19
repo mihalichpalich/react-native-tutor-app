@@ -10,9 +10,7 @@ import {
     StudentsScreen,
     EditLessonScreen,
     EditStudentScreen,
-    RegistrationScreen,
-    ConfirmationScreen,
-    LoginScreen,
+    SignInScreen,
     ProgramScreen,
     AddProgramScreen
 } from "./screens";
@@ -40,14 +38,8 @@ const AppNavigator = createStackNavigator(
         EditStudent: {
             screen: EditStudentScreen
         },
-        Registration: {
-            screen: RegistrationScreen
-        },
-        Confirmation: {
-            screen: ConfirmationScreen
-        },
-        Login: {
-            screen: LoginScreen
+        SignIn: {
+            screen: SignInScreen
         },
         Program: {
             screen: ProgramScreen
@@ -57,7 +49,7 @@ const AppNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: 'Login'
+        initialRouteName: 'SignIn'
     }
 );
 

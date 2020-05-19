@@ -25,7 +25,6 @@ const HomeScreen = (props) => {
     };
 
     useEffect(fetchLessons, []);
-
     useEffect(fetchLessons, [navigation.state.params]);
 
     const removeLesson = id => {
