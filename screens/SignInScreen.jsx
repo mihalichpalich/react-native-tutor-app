@@ -1,17 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styled from 'styled-components/native';
-import {Text, View, Button} from 'react-native';
-import { Item, Input, Label } from 'native-base';
+import {Button} from 'react-native';
 import * as Google from 'expo-google-app-auth';
 
 import {usersApi, programsApi, lessonsApi} from "../utils/api";
 
 const SignInScreen = ({navigation}) => {
-    const [values, setValues] = useState({
-        email: '',
-        googleID: ''
-    });
-
     const onSubmit = async function signInWithGoogleAsync() {
         try {
             const result = await Google.logInAsync({
@@ -20,12 +14,40 @@ const SignInScreen = ({navigation}) => {
             });
 
             if (result.type === 'success') {
-                setValues({
-                    email: result.user.email,
-                    googleID: result.user.id
-                });
-                usersApi.signIn(values).then(() => {
-                    navigation.navigate('Home');
+                usersApi.signIn(
+                        {
+                            email: result.user.email,
+                            googleID: result.user.id
+                        }
+                    ).then((res) => {
+                        if (res.status === 201 || res.status === 500) {
+                            usersApi.getByEmail(result.user.email).then(({data}) => {
+                                const userId = data.data.user._id;
+
+                                programsApi.get(userId).then(({data}) => {
+                                    if (data.data.length == 0) {
+                                        navigation.navigate('Program', {user: userId});
+                                    } else {
+                                        lessonsApi.get(userId).then(({data}) => {
+                                            if (data.data.length == 0) {
+                                                navigation.navigate('Students', {user: userId});
+                                            } else {
+                                                navigation.navigate('Home', {user: userId});
+                                            }
+                                        })
+                                        .catch(e => {
+                                            console.log(e);
+                                        });
+                                    }
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                });
+                            })
+                            .catch(e => {
+                                console.log(e);
+                            });
+                        }
                 }).catch(e => {
                     console.log(e);
                 })
@@ -51,18 +73,8 @@ const SignInContainer = styled.View`
     background-color: #fff;
 `;
 
-const SignInHeader = styled.Text`
-    font-size: 25px;
-`;
-
-
 SignInScreen.navigationOptions = {
-    title: "Вход",
-    headerTintColor: '#2A86FF',
-    headerStyle: {
-        elevation: 0.8,
-        shadowOpacity: 0.8
-    }
+    headerShown: false
 };
 
 export default SignInScreen;

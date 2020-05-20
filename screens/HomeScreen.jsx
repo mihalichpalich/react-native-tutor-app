@@ -98,8 +98,15 @@ HomeScreen.navigationOptions = ({navigation}) => ({
                 <Ionicons name="md-people" size={28} color="black"/>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={navigation.navigate.bind(this, 'Program', {user: navigation.state.params.user})}>
+            <TouchableOpacity
+                onPress={navigation.navigate.bind(this, 'Program', {user: navigation.state.params.user})}
+                style={{marginRight: 10}}
+            >
                 <Ionicons name="md-school" size={28} color="black"/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={navigation.navigate.bind(this, 'SignIn')}>
+                <Ionicons name="md-log-out" size={28} color="black"/>
             </TouchableOpacity>
         </HeaderButtons>
     )
