@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {FlatList, Alert, TouchableOpacity, View} from 'react-native';
+import {FlatList, Alert, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import Swipeable from 'react-native-swipeable-row';

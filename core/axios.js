@@ -1,6 +1,6 @@
 import axios from 'axios';
-// import Constants from 'expo-constants';
-// const { manifest } = Constants;
+import Constants from 'expo-constants';
+const { manifest } = Constants;
 
 axios.defaults.baseURL = 'https://safe-peak-68652.herokuapp.com/';
 
